@@ -3,29 +3,54 @@
 <head>
 	<title>Who run the world? Cats.</title>
 	<link rel="stylesheet" type="text/css" href="style.css">
+        <script>
+            function myFunction(id) {
+                document.getElementById("test").innerHTML = "Paragraph changed.";
+            }
+            function toggle_visibility(id) {
+                var e = document.getElementById(id);
+                if ( e.style.display == 'block' )
+                    e.style.display = 'none';
+                else
+                    e.style.display = 'block';
+            }
+            function toggle_self(idOff,idOn) {
+                var off = document.getElementById(idOff);
+                var on = document.getElementById(idOn);
+                off.style.display='none';
+                on.style.display='block'
+            }
+        </script>
 </head>
 <body>
 	<div id = "header">
 		<h1>Syndicate</h1>
-		<!--
-		<a href = "index.html">
-		<img src="blockM.jpg" alt="block M Homepage">
-		</a>
-		<div id="linkTags">
-		<ul>
-		<a href="index.html"><li class="tabs">Home</li></a>
-		<a href = "food.html"><li class="tabs">Food</li></a>
-		<a href = "travel.html"><li class="curTab">Travel</li></a>
-		<a href = "videos.html"><li class="tabs">Videos</li></a>
-		<a href = "contact.html"><li class="tabs">Contact</li></a>
-		</ul> -->
 	</div>
-	<div id="mainBody">
+	<div id="start">
 		<h2>We run this mother</h2>
 		<p>Cats.</p>
-		<p>Cats.</p>
+		<p id="test">Cats.</p>
+                <button type="button" onclick="toggle_self('start','answers')">Push it real good!</button> 
 			<div class="hide">
-				<p>Dogs.</p>
+				<p >Dogs.</p>
+			</div>
+	</div>
+        <div id="answers">
+		<h2>We run this mother</h2>
+		<p>Cats.</p>
+		<p id="test">Cats.</p>
+                <button type="button" onclick="toggle_self('answers','results')">answers!</button> 
+			<div class="hide">
+				<p >Dogs.</p>
+			</div>
+	</div>
+        <div id="results">
+		<h2>We run this mother</h2>
+		<p>Cats.</p>
+		<p id="test">Cats.</p>
+                <button type="button" onclick="toggle_self('header')">Results!</button> 
+			<div class="hide">
+				<p >Dogs.</p>
 			</div>
 	</div>
 </body>
