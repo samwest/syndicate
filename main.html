@@ -3,55 +3,91 @@
 <head>
 	<title>Who run the world? Cats.</title>
 	<link rel="stylesheet" type="text/css" href="style.css">
-        <script>
-            function myFunction(id) {
-                document.getElementById("test").innerHTML = "Paragraph changed.";
-            }
-            function toggle_visibility(id) {
-                var e = document.getElementById(id);
-                if ( e.style.display == 'block' )
-                    e.style.display = 'none';
-                else
-                    e.style.display = 'block';
-            }
-            function toggle_self(idOff,idOn) {
-                var off = document.getElementById(idOff);
-                var on = document.getElementById(idOn);
-                off.style.display='none';
-                on.style.display='block'
-            }
+	<script>
+	var answerArray = []
+	function addAnswer() {
+		var input = document.forms["responseFrom"]["answerForm"].value;
+		document.forms["responseFrom"]["answerForm"].value="";
+		answerArray[answerArray.length]=input;  // add the response in 
+	}
+	function displayAnswers() {
+		var val;
+		var i;
+		for (i=0; i <answerArray.length; i++) {
+			if (i==0) {
+				val=answerArray[i];
+			}
+			else {
+				val += " - " + answerArray[i];
+			}
+		}
+		if (val=="" || val==null) {
+			val="No Answers Entered";  // reset the header to having no prompt entered
+		}
+		document.getElementById("listAnswers").innerHTML = val;
+	}
+	function toggle_self(idOff,idOn) {
+		var input;
+		if (idOff=='start') {
+			input = document.forms["promptForm"]["prompt"].value;
+			if (input=="" || input==null) {
+				input="No Prompt Entered";
+			}
+			document.getElementById("question").innerHTML=input;
+			document.forms["promptForm"]["prompt"].value="";
+		}
+		else if (idOff=='answers') {
+			displayAnswers();
+		}
+		else if (idOff=='results') {
+			answerArray = [];  // we need to refresh the array
+			document.forms["responseFrom"]["answerForm"].value=""; // just in case there is an extra answer we will clear it
+		}
+		
+		var off = document.getElementById(idOff);
+		var on = document.getElementById(idOn);
+		off.style.display='none';
+		on.style.display='block'
+	}
+	function hideStart() {
+		var results=document.getElementById('results');
+		var answers=document.getElementById('answers');
+		results.style.display='none';
+		answers.style.display='none';
+	}
+            
         </script>
 </head>
-<body>
+<body onload="hideStart()">
 	<div id = "header">
 		<h1>Syndicate</h1>
 	</div>
 	<div id="start">
-		<h2>We run this mother</h2>
+		<h2>Prompt for question</h2>
 		<p>Cats.</p>
-		<p id="test">Cats.</p>
+		<p>Cats.</p>
+		<form name="promptForm" autocomplete="off">
+		Prompt: <input type="text" name="prompt">
+		<input type="text" name="name" id="name" class="hide">  <!-- this simply blocks a submission from pressing enter --> 
+		</form>
                 <button type="button" onclick="toggle_self('start','answers')">Push it real good!</button> 
-			<div class="hide">
-				<p >Dogs.</p>
-			</div>
 	</div>
         <div id="answers">
-		<h2>We run this mother</h2>
+		<h2 id="question">No Prompt Entered</h2>
 		<p>Cats.</p>
-		<p id="test">Cats.</p>
-                <button type="button" onclick="toggle_self('answers','results')">answers!</button> 
-			<div class="hide">
-				<p >Dogs.</p>
-			</div>
+		<p>Cats.</p>
+		<form name="responseFrom" autocomplete="off">
+		Answer: <input type="text" name="answerForm">  
+		 <input type="text" name="name" id="name" class="hide"> <!-- this simply blocks a submission from pressing enter --> 
+		</form>
+		<button type="button" onclick="addAnswer()">Answer</button>
+		<button type="button" onclick="toggle_self('answers','results')">Finished!</button> 
 	</div>
-        <div id="results">
-		<h2>We run this mother</h2>
+	<div id="results">
+		<h2>Results</h2>
 		<p>Cats.</p>
-		<p id="test">Cats.</p>
-                <button type="button" onclick="toggle_self('header')">Results!</button> 
-			<div class="hide">
-				<p >Dogs.</p>
-			</div>
+		<p id="listAnswers">Cats.</p>
+		<button type="button" onclick="toggle_self('results','start')">Restart!</button> 
 	</div>
 </body>
 </html> 

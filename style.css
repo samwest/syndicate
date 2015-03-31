@@ -61,5 +61,10 @@ h1 {
 
 }
 div.hide {
-	visibility: hidden
+	visibility: hidden;
 }
+
+input.hide {
+    visibility: hidden;
+}
+
