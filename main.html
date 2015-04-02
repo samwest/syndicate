@@ -5,8 +5,31 @@
 	<link rel="stylesheet" type="text/css" href="style.css">
 	<script>
 	var answerArray = []
+	var tagBody = '(?:[^"\'>]|"[^"]*"|\'[^\']*\')*';
+
+	var tagOrComment = new RegExp(
+	    '<(?:'
+	    // Comment body.
+	    + '!--(?:(?:-*[^->])*--+|-?)'
+	    // Special "raw text" elements whose content should be elided.
+	    + '|script\\b' + tagBody + '>[\\s\\S]*?</script\\s*'
+	    + '|style\\b' + tagBody + '>[\\s\\S]*?</style\\s*'
+	    // Regular name
+	    + '|/?[a-z]'
+	    + tagBody
+	    + ')>',
+	    'gi');
+	function removeTags(html) {
+	  var oldHtml;
+	  do {
+	    oldHtml = html;
+	    html = html.replace(tagOrComment, '');
+	  } while (html !== oldHtml);
+	  return html.replace(/</g, '&lt;');
+	}
 	function addAnswer() {
 		var input = document.forms["responseFrom"]["answerForm"].value;
+		input = removeTags(input)
 		document.forms["responseFrom"]["answerForm"].value="";
 		answerArray[answerArray.length]=input;  // add the response in 
 	}
