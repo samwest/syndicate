@@ -27,27 +27,71 @@
 	  } while (html !== oldHtml);
 	  return html.replace(/</g, '&lt;');
 	}
+	function randomizeOutput() {
+		var i;
+		var length=answerArray.length;
+		var foundPos;
+		var pos;
+		var output =[];
+		if (length==1) {
+			output[0]=answerArray[0];
+		}
+		else {
+			output[length-1]=undefined;  // initialize the last value in the array to be undefined
+			for (i=0;i<length; i++) {
+				foundPos=0;
+				pos=Math.floor((Math.random() * length));
+				while (!foundPos) {
+					if (output[pos]!=null) {
+						pos++;            // if we alread set data to this field then increment theo position
+						if (pos==length) {  // if we are at the size of the array set pos back to 0
+							pos=0;
+						} 
+					}
+					else {
+						output[pos]=answerArray[i];
+						foundPos=1;
+					}
+				}	
+			}
+		}
+		displayAnswers(output);
+		
+	}
+	
 	function addAnswer() {
 		var input = document.forms["responseFrom"]["answerForm"].value;
-		input = removeTags(input)
+		input = removeTags(input); 
+		if (input != null && input != undefined && input!="") {
+			answerArray[answerArray.length]=input;  // add the response in
+		}
 		document.forms["responseFrom"]["answerForm"].value="";
-		answerArray[answerArray.length]=input;  // add the response in 
 	}
-	function displayAnswers() {
-		var val;
+	function displayAnswers(output) {
+		var found;
 		var i;
-		for (i=0; i <answerArray.length; i++) {
+		var answList=document.getElementById("resultList");
+		var entry; //= document.createElement('li');
+		var node
+		
+
+
+		for (i=0; i <output.length; i++) {
+			entry = document.createElement('li');
+			node=document.createTextNode(output[i]);
 			if (i==0) {
-				val=answerArray[i];
+				found=1
+				entry.appendChild(node);
+				answList.appendChild(entry);
 			}
 			else {
-				val += " - " + answerArray[i];
+				entry.appendChild(node);
+				answList.appendChild(entry);
 			}
 		}
-		if (val=="" || val==null) {
+		if (found=="" || found==null) {
 			val="No Answers Entered";  // reset the header to having no prompt entered
 		}
-		document.getElementById("listAnswers").innerHTML = val;
 	}
 	function toggle_self(idOff,idOn) {
 		var input;
@@ -60,7 +104,7 @@
 			document.forms["promptForm"]["prompt"].value="";
 		}
 		else if (idOff=='answers') {
-			displayAnswers();
+			randomizeOutput();
 		}
 		else if (idOff=='results') {
 			answerArray = [];  // we need to refresh the array
@@ -110,6 +154,8 @@
 		<h2>Results</h2>
 		<p>Cats.</p>
 		<p id="listAnswers">Cats.</p>
+		<ol id="resultList">
+		</ol>  
 		<button type="button" onclick="toggle_self('results','start')">Restart!</button> 
 	</div>
 </body>
